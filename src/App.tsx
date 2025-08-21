@@ -18,11 +18,12 @@ export const goodsFromServer: string[] = [
 enum SortType {
   Alphabet = 'alphabet',
   Length = 'length',
+  None = '',
 }
 
-function getPreparedGood(
+function getPreparedGoods(
   goods: string[],
-  sortField: SortType | '',
+  sortField: SortType,
   isReversed: boolean,
 ): string[] {
   const preparedGoods = [...goods];
@@ -48,10 +49,10 @@ function getPreparedGood(
 }
 
 export const App: React.FC = () => {
-  const [sortField, setSortField] = useState<SortType | ''>('');
+  const [sortField, setSortField] = useState<SortType>(SortType.None);
   const [isReversed, setIsReversed] = useState(false);
 
-  const visibleGoods: string[] = getPreparedGood(
+  const visibleGoods: string[] = getPreparedGoods(
     goodsFromServer,
     sortField,
     isReversed,
@@ -89,7 +90,7 @@ export const App: React.FC = () => {
             type="button"
             className="button is-danger is-light"
             onClick={() => {
-              setSortField('');
+              setSortField(SortType.None);
               setIsReversed(false);
             }}
           >
@@ -99,13 +100,11 @@ export const App: React.FC = () => {
       </div>
 
       <ul>
-        <ul>
-          {visibleGoods.map(good => (
-            <li key={good} data-cy="Good">
-              {good}
-            </li>
-          ))}
-        </ul>
+        {visibleGoods.map(good => (
+          <li key={good} data-cy="Good">
+            {good}
+          </li>
+        ))}
       </ul>
     </div>
   );
